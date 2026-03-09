@@ -49,7 +49,22 @@ async function getOrderById(orderId) {
   return order;
 }
 
+async function listOrders() {
+  const orders = await Order.findAll({
+    include: [
+      {
+        model: Item,
+        as: 'items'
+      }
+    ],
+    order: [['creationDate', 'DESC']]
+  });
+
+  return orders;
+}
+
 module.exports = {
   createOrder,
-  getOrderById
+  getOrderById,
+  listOrders
 };

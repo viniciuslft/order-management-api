@@ -21,7 +21,18 @@ async function getOrderById(req, res, next) {
   }
 }
 
+async function listOrders(req, res, next) {
+  try {
+    const orders = await orderService.listOrders();
+
+    return res.status(200).json(orders);
+  } catch (error) {
+    return next(error);
+  }
+}
+
 module.exports = {
   createOrder,
-  getOrderById
+  getOrderById,
+  listOrders
 };
