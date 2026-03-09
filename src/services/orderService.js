@@ -100,9 +100,28 @@ async function updateOrder(orderId, payload) {
   });
 }
 
+async function deleteOrder(orderId) {
+  const existingOrder = await Order.findByPk(orderId);
+
+  if (!existingOrder) {
+    const error = new Error('Order not found.');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  await Item.destroy({
+    where: { orderId }
+  });
+
+  await Order.destroy({
+    where: { orderId }
+  });
+}
+
 module.exports = {
   createOrder,
   getOrderById,
   listOrders,
-  updateOrder
+  updateOrder,
+  deleteOrder
 };

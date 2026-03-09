@@ -42,9 +42,22 @@ async function updateOrder(req, res, next) {
   }
 }
 
+async function deleteOrder(req, res, next) {
+  try {
+    const { orderId } = req.params;
+
+    await orderService.deleteOrder(orderId);
+
+    return res.status(204).send();
+  } catch (error) {
+    return next(error);
+  }
+}
+
 module.exports = {
   createOrder,
   getOrderById,
   listOrders,
-  updateOrder
+  updateOrder,
+  deleteOrder
 };
