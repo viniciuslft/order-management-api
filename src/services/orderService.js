@@ -63,8 +63,46 @@ async function listOrders() {
   return orders;
 }
 
+async function updateOrder(orderId, payload) {
+  const existingOrder = await Order.findByPk(orderId);
+
+  if (!existingOrder) {
+    const error = new Error('Order not found.');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  const mappedOrder = mapOrderPayload(payload);
+
+  await existingOrder.update({
+    value: mappedOrder.value,
+    creationDate: mappedOrder.creationDate
+  });
+
+  await Item.destroy({
+    where: { orderId }
+  });
+
+  await Item.bulkCreate(
+    mappedOrder.items.map((item) => ({
+      ...item,
+      orderId
+    }))
+  );
+
+  return await Order.findByPk(orderId, {
+    include: [
+      {
+        model: Item,
+        as: 'items'
+      }
+    ]
+  });
+}
+
 module.exports = {
   createOrder,
   getOrderById,
-  listOrders
+  listOrders,
+  updateOrder
 };

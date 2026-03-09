@@ -31,8 +31,20 @@ async function listOrders(req, res, next) {
   }
 }
 
+async function updateOrder(req, res, next) {
+  try {
+    const { orderId } = req.params;
+    const updatedOrder = await orderService.updateOrder(orderId, req.body);
+
+    return res.status(200).json(updatedOrder);
+  } catch (error) {
+    return next(error);
+  }
+}
+
 module.exports = {
   createOrder,
   getOrderById,
-  listOrders
+  listOrders,
+  updateOrder
 };
