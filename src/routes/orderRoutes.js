@@ -1,6 +1,7 @@
 const express = require('express');
 const orderController = require('../controllers/orderController');
 const validateOrder = require('../middlewares/validateOrder');
+const authenticateToken = require('../middlewares/authenticateToken');
 
 const router = express.Router();
 
@@ -92,6 +93,8 @@ const router = express.Router();
  *   post:
  *     summary: Create a new order
  *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -107,10 +110,12 @@ const router = express.Router();
  *               $ref: '#/components/schemas/OrderResponse'
  *       400:
  *         description: Validation error
+ *       401:
+ *         description: Unauthorized
  *       409:
  *         description: Order already exists
  */
-router.post('/order', validateOrder, orderController.createOrder);
+router.post('/order', authenticateToken, validateOrder, orderController.createOrder);
 
 /**
  * @swagger
@@ -118,17 +123,21 @@ router.post('/order', validateOrder, orderController.createOrder);
  *   get:
  *     summary: List all orders
  *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Orders retrieved successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/OrderResponse'
+ *              type: array
+*               items:
+ *               $ref: '#/components/schemas/OrderResponse'
+ *       401:
+ *         description: Unauthorized
  */
-router.get('/order/list', orderController.listOrders);
+router.get('/order/list', authenticateToken, orderController.listOrders);
 
 /**
  * @swagger
@@ -136,6 +145,8 @@ router.get('/order/list', orderController.listOrders);
  *   get:
  *     summary: Get an order by ID
  *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: orderId
@@ -150,10 +161,12 @@ router.get('/order/list', orderController.listOrders);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/OrderResponse'
+ *      401:
+ *         description: Unauthorized
  *       404:
  *         description: Order not found
  */
-router.get('/order/:orderId', orderController.getOrderById);
+router.get('/order/:orderId', authenticateToken, orderController.getOrderById);
 
 /**
  * @swagger
@@ -161,6 +174,8 @@ router.get('/order/:orderId', orderController.getOrderById);
  *   put:
  *     summary: Update an existing order
  *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: orderId
@@ -183,10 +198,12 @@ router.get('/order/:orderId', orderController.getOrderById);
  *               $ref: '#/components/schemas/OrderResponse'
  *       400:
  *         description: Validation error
+ *       401:
+ *         description: Unauthorized
  *       404:
  *         description: Order not found
  */
-router.put('/order/:orderId', validateOrder, orderController.updateOrder);
+router.put('/order/:orderId', authenticateToken, validateOrder, orderController.updateOrder);
 
 /**
  * @swagger
@@ -194,6 +211,8 @@ router.put('/order/:orderId', validateOrder, orderController.updateOrder);
  *   delete:
  *     summary: Delete an order
  *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: orderId
@@ -204,9 +223,11 @@ router.put('/order/:orderId', validateOrder, orderController.updateOrder);
  *     responses:
  *       204:
  *         description: Order deleted successfully
+ *       401:
+ *         description: Unauthorized
  *       404:
  *         description: Order not found
  */
-router.delete('/order/:orderId', orderController.deleteOrder);
+router.delete('/order/:orderId', authenticateToken, orderController.deleteOrder);
 
 module.exports = router;
