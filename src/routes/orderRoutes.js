@@ -131,9 +131,9 @@ router.post('/order', authenticateToken, validateOrder, orderController.createOr
  *         content:
  *           application/json:
  *             schema:
- *              type: array
-*               items:
- *               $ref: '#/components/schemas/OrderResponse'
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/OrderResponse'
  *       401:
  *         description: Unauthorized
  */
@@ -161,7 +161,7 @@ router.get('/order/list', authenticateToken, orderController.listOrders);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/OrderResponse'
- *      401:
+ *       401:
  *         description: Unauthorized
  *       404:
  *         description: Order not found
