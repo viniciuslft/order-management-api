@@ -1,4 +1,6 @@
 const express = require('express');
+const orderRoutes = require('./routes/orderRoutes');
+const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
 
@@ -9,5 +11,8 @@ app.get('/', (req, res) => {
     message: 'Order Management API is running.'
   });
 });
+
+app.use(orderRoutes);
+app.use(errorHandler);
 
 module.exports = app;
